@@ -27,17 +27,24 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ZeroSwerves;
 import frc.robot.util.MoreMath;
 import io.github.oblarg.oblog.Loggable;
 
 public class DrivetrainSubsystem extends SubsystemBase implements Loggable{
+  private static DrivetrainSubsystem mInstance;
+  public static DrivetrainSubsystem getInstance(){
+        if (mInstance == null) mInstance = new DrivetrainSubsystem();
+        return mInstance;
+  } 
+
+
   public static final double MAX_VOLTAGE = 12.0;
   private ProfiledPIDController mSnapController;
   //  The formula for calculating the theoretical maximum velocity is:
@@ -164,6 +171,10 @@ public class DrivetrainSubsystem extends SubsystemBase implements Loggable{
   public void drive(ChassisSpeeds chassisSpeeds) {
         SmartDashboard.putNumber("speeds", chassisSpeeds.vxMetersPerSecond);
     m_chassisSpeeds = chassisSpeeds;
+  }
+
+  public void addVisionMeasurement(Pose2d pose){
+        mPoseEstimator.addVisionMeasurement(pose , Timer.getFPGATimestamp());
   }
   @Override
   public void periodic() {
