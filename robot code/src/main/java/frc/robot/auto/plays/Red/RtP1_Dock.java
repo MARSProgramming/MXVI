@@ -17,7 +17,7 @@ public class RtP1_Dock extends SequentialCommandGroup{
         Trajectory P1toMarker = AutoChooser.openTrajectoryFile("RED_TopMarker_P1-M.wpilib.json");
         Trajectory MarkerToDock = AutoChooser.openTrajectoryFile("RED_TopMarker_M-C.wpilib.json");
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
+            new ResetDrivePose(drivetrain, 14.71, 4.37, 0),
             new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, MarkertoP1, new Rotation2d(0), 10),
                 new DriveAtPath(drivetrain, P1toMarker, new Rotation2d(0), 10),

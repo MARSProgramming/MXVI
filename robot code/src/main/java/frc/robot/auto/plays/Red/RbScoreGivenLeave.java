@@ -12,7 +12,7 @@ public class RbScoreGivenLeave extends SequentialCommandGroup{
         addRequirements(drivetrain);
         // Add stuff here to leave community
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
+            new ResetDrivePose(drivetrain, 14.71, 4.36, 0),
             new ParallelCommandGroup(
                 // Add stuff here to score given piece
                 // Add more 

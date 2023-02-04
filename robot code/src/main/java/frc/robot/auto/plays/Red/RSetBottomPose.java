@@ -10,7 +10,7 @@ public class RSetBottomPose extends SequentialCommandGroup{
         addRequirements(drivetrain);
 
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 0.45, 0),
+            new ResetDrivePose(drivetrain, 14.71, 0.45, 0),
             new ParallelCommandGroup(
 
             )

@@ -10,7 +10,7 @@ public class RSetMidPose extends SequentialCommandGroup{
         addRequirements(drivetrain);
 
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 2.69, 0),
+            new ResetDrivePose(drivetrain, 14.71, 2.69, 0),
             new ParallelCommandGroup(
 
             )

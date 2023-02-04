@@ -12,7 +12,7 @@ public class RbScoreGiven extends SequentialCommandGroup{
         addRequirements(drivetrain);
 
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
+            new ResetDrivePose(drivetrain, 14.71, 4.36, 0),
             new ParallelCommandGroup(
                 // Add stuff here to score given piece
             )

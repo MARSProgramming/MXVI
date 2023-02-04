@@ -15,7 +15,7 @@ public class RMidLeaveCommunity extends SequentialCommandGroup{
 
         Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("RED_MiddleLeaveCommunity.wpilib.json");
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 2.69, 0),
+            new ResetDrivePose(drivetrain, 14.71, 2.69, 0),
             new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, LeaveCommunity, new Rotation2d(0), 10)
             )

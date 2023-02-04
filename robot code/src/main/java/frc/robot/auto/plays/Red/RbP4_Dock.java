@@ -17,7 +17,7 @@ public class RbP4_Dock extends SequentialCommandGroup{
         Trajectory P4toMarker = AutoChooser.openTrajectoryFile("RED_BottomMarker_P4-M.wpilib.json");
         Trajectory MarkerToDock = AutoChooser.openTrajectoryFile("RED_BottomMarker_M-C.wpilib.json");
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 0.45, 0),
+            new ResetDrivePose(drivetrain, 14.71, 0.45, 0),
             new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, MarkertoP4, new Rotation2d(0), 10),
                 new DriveAtPath(drivetrain, P4toMarker, new Rotation2d(0), 10),

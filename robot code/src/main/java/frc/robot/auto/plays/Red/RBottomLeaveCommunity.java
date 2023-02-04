@@ -15,7 +15,7 @@ public class RBottomLeaveCommunity extends SequentialCommandGroup{
 
         Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("RED_BottomLeaveCommunity.wpilib.json");
         addCommands(
-            new ResetDrivePose(drivetrain, 1.81, 0.45, 0),
+            new ResetDrivePose(drivetrain, 14.71, 0.45, 0),
             new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, LeaveCommunity, new Rotation2d(0), 10)
             )
