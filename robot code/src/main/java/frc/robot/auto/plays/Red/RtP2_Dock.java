@@ -13,9 +13,9 @@ public class RtP2_Dock extends SequentialCommandGroup{
     public RtP2_Dock(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory MarkertoP2 = AutoChooser.openTrajectoryFile("BLUE_TopMarker_M-P2.wpilib.json");
-        Trajectory P2toMarker = AutoChooser.openTrajectoryFile("BLUE_TopMarker_P2-M.wpilib.json");
-        Trajectory MarkerToDock = AutoChooser.openTrajectoryFile("BLUE_TopMarker_M-C.wpilib.json");
+        Trajectory MarkertoP2 = AutoChooser.openTrajectoryFile("RED_TopMarker_M-P2.wpilib.json");
+        Trajectory P2toMarker = AutoChooser.openTrajectoryFile("RED_TopMarker_P2-M.wpilib.json");
+        Trajectory MarkerToDock = AutoChooser.openTrajectoryFile("RED_TopMarker_M-C.wpilib.json");
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
             new ParallelCommandGroup(

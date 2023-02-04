@@ -13,7 +13,7 @@ public class RBottomLeaveCommunity extends SequentialCommandGroup{
     public RBottomLeaveCommunity(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_BottomLeaveCommunity.wpilib.json");
+        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("RED_BottomLeaveCommunity.wpilib.json");
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 0.45, 0),
             new ParallelCommandGroup(

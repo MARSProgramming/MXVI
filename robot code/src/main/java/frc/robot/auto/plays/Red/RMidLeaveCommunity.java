@@ -13,7 +13,7 @@ public class RMidLeaveCommunity extends SequentialCommandGroup{
     public RMidLeaveCommunity(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_MiddleLeaveCommunity.wpilib.json");
+        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("RED_MiddleLeaveCommunity.wpilib.json");
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 2.69, 0),
             new ParallelCommandGroup(

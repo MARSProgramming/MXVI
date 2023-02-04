@@ -13,8 +13,8 @@ public class RtP2_NoDock extends SequentialCommandGroup{
     public RtP2_NoDock(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory MarkertoP2 = AutoChooser.openTrajectoryFile("BLUE_TopMarker_M-P2.wpilib.json");
-        Trajectory P2toMarker = AutoChooser.openTrajectoryFile("BLUE_TopMarker_P2-M.wpilib.json");
+        Trajectory MarkertoP2 = AutoChooser.openTrajectoryFile("RED_TopMarker_M-P2.wpilib.json");
+        Trajectory P2toMarker = AutoChooser.openTrajectoryFile("RED_TopMarker_P2-M.wpilib.json");
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
             new ParallelCommandGroup(

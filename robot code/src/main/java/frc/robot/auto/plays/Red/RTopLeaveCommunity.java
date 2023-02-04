@@ -13,7 +13,7 @@ public class RTopLeaveCommunity extends SequentialCommandGroup{
     public RTopLeaveCommunity(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_TopLeaveCommunity.wpilib.json");
+        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("RED_TopLeaveCommunity.wpilib.json");
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
             new ParallelCommandGroup(
