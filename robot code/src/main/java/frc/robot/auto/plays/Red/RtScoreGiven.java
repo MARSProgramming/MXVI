@@ -1,13 +1,13 @@
-package frc.robot.auto.plays.Blue;
+package frc.robot.auto.plays.Red;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ResetDrivePose;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class BtScoreGiven extends SequentialCommandGroup{
+public class RtScoreGiven extends SequentialCommandGroup{
     private DrivetrainSubsystem mDrivetrain;
-    public BtScoreGiven(DrivetrainSubsystem drivetrain){
+    public RtScoreGiven(DrivetrainSubsystem drivetrain){
         mDrivetrain = drivetrain;
         addRequirements(drivetrain);
 

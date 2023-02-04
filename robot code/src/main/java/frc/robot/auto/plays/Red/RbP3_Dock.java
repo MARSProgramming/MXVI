@@ -1,4 +1,4 @@
-package frc.robot.auto.plays.Blue;
+package frc.robot.auto.plays.Red;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -9,8 +9,8 @@ import frc.robot.commands.ResetDrivePose;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
 
-public class BbP3_Dock extends SequentialCommandGroup{
-    public BbP3_Dock(DrivetrainSubsystem drivetrain){
+public class RbP3_Dock extends SequentialCommandGroup{
+    public RbP3_Dock(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
         Trajectory MarkertoP3 = AutoChooser.openTrajectoryFile("BLUE_BottomMarker_M-P3.wpilib.json");

@@ -1,4 +1,4 @@
-package frc.robot.auto.plays.Blue;
+package frc.robot.auto.plays.Red;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -9,8 +9,8 @@ import frc.robot.commands.ResetDrivePose;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
 
-public class BTopLeaveCommunity extends SequentialCommandGroup{
-    public BTopLeaveCommunity(DrivetrainSubsystem drivetrain){
+public class RTopLeaveCommunity extends SequentialCommandGroup{
+    public RTopLeaveCommunity(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
         Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_TopLeaveCommunity.wpilib.json");
