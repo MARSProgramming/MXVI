@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -82,26 +78,9 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.configureTeleopBindings();
-    srx.setNeutralMode(NeutralMode.Brake);
-    srx2.setNeutralMode(NeutralMode.Brake);
-    srx2.follow(srx);
-    srx2.setInverted(true);
-    srx.setInverted(true);
   }
-
-  //TalonFX thej = new TalonFX(14, "Drivetrain");
-  /** This function is called periodically during operator control. */
-  TalonSRX srx = new TalonSRX(0);
-  TalonSRX srx2 = new TalonSRX(13);
   @Override
   public void teleopPeriodic() {
-    //thej.set(ControlMode.PercentOutput, 0.5);
-    if(m_robotContainer.getPilot().getLeftTriggerAxis() > 0.2){
-      srx.set(ControlMode.PercentOutput, m_robotContainer.getPilot().getLeftTriggerAxis());
-    }
-    else{
-      srx.set(ControlMode.PercentOutput, 0.0);
-    }
   }
 
   @Override

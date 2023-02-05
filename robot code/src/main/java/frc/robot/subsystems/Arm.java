@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -11,6 +12,8 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase{
     private TalonFX mElbow;
     private TalonFX mShoulder;
+
+    private double talonFXSensorCoefficient = 2048;
     public Arm(){
         mElbow = new TalonFX(Constants.Arm.kElbowMotorID);
         mShoulder = new TalonFX(Constants.Arm.kShoulderMotorID);
@@ -19,8 +22,31 @@ public class Arm extends SubsystemBase{
         mElbow.configAllSettings(config);
         mShoulder.configAllSettings(config);
 
+        mElbow.setSelectedSensorPosition(0, 0, 0);
+        mShoulder.setSelectedSensorPosition(0, 0, 0);
+
+        mElbow.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+        mShoulder.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+
+        mElbow.config_kP(0, 0.00001);
+        mShoulder.config_kP(0, 0.00001);
+        mElbow.config_kI(0, 0.0);
+        mShoulder.config_kI(0, 0.0);
+        mElbow.config_kD(0, 0.0);
+        mShoulder.config_kD(0, 0.0);
+        mElbow.config_kF(0, 0.0);
+        mShoulder.config_kF(0, 0.0);
+
         mElbow.setNeutralMode(NeutralMode.Brake);
         mShoulder.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void setShoulderAngle(double deg){
+        mShoulder.set(ControlMode.Position, deg * talonFXSensorCoefficient);
+    }
+
+    public void setElbowAngle(double deg){
+        mElbow.set(ControlMode.Position, deg * talonFXSensorCoefficient);
     }
 
     public void runElbowPOutput(double v){
