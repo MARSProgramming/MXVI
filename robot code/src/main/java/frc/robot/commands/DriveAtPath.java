@@ -22,14 +22,14 @@ public class DriveAtPath extends CommandBase {
     private Rotation2d mEndRotation;
     private double timeout;
 
-    public DriveAtPath(DrivetrainSubsystem subsystem, Trajectory traj, Rotation2d rotation, double timeout) {
+    public DriveAtPath(DrivetrainSubsystem subsystem, Trajectory traj, double rotation, double timeout) {
         mTrajectory = traj;
         mDrivetrainSubsystem = subsystem;
         mController = new HolonomicDriveController(new PIDController(Constants.Auto.holonomicXkP, Constants.Auto.holonomicXkI, Constants.Auto.holonomicXkD), new PIDController(Constants.Auto.holonomicYkP, Constants.Auto.holonomicYkI, Constants.Auto.holonomicYkD), new ProfiledPIDController(Constants.Auto.holonomicOkP, Constants.Auto.holonomicOkI, Constants.Auto.holonomicOkD, new TrapezoidProfile.Constraints(Constants.Auto.holonomicOMaxVelocity, Constants.Auto.holonomicOMaxAcceleration)));
         mTimer = new Timer();
-        mEndRotation = rotation;
+        mEndRotation = new Rotation2d(Math.toRadians(rotation));
         this.timeout = timeout;
-        mController.setTolerance(new Pose2d(0.01, 0.01, new Rotation2d(0.01)));
+        mController.setTolerance(new Pose2d(0.3, 0.3, new Rotation2d(0.3)));
         
         addRequirements(subsystem);
     }

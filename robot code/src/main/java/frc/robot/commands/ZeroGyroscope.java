@@ -5,13 +5,15 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class ZeroGyroscope extends CommandBase{
     private DrivetrainSubsystem mDT;
-    public ZeroGyroscope(DrivetrainSubsystem dt){
+    private double zero;
+    public ZeroGyroscope(DrivetrainSubsystem dt, double zero){
         mDT = dt;
+        this.zero = zero;
         addRequirements(dt);
     }
 
     @Override
     public void initialize(){
-        mDT.zeroGyroscope();
+        mDT.zeroGyroscope(zero);
     }
 }

@@ -1,6 +1,5 @@
 package frc.robot.auto.plays.Blue;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,8 +17,8 @@ public class BtP2_NoDock extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
             new ParallelCommandGroup(
-                new DriveAtPath(drivetrain, MarkertoP2, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, P2toMarker, new Rotation2d(0), 10)
+                new DriveAtPath(drivetrain, MarkertoP2, 0, 10),
+                new DriveAtPath(drivetrain, P2toMarker, 0, 10)
 
             )
 

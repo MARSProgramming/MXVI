@@ -70,7 +70,7 @@ public class RobotContainer {
    */
   public void configureTeleopBindings() {
     //mPilot.getYButtonObject().onTrue(new ResetDrivePose(mDrivetrainSubsystem, 0.0, 0.0, 0.0));
-    mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem));
+    mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
     System.out.println("Teleop Bindings Configured");

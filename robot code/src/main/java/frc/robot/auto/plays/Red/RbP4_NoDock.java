@@ -1,6 +1,5 @@
 package frc.robot.auto.plays.Red;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,8 +17,8 @@ public class RbP4_NoDock extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 14.71, 0.45, 0),
             new ParallelCommandGroup(
-                new DriveAtPath(drivetrain, MarkertoP4, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, P4toMarker, new Rotation2d(0), 10)
+                new DriveAtPath(drivetrain, MarkertoP4, 0, 10),
+                new DriveAtPath(drivetrain, P4toMarker, 0, 10)
 
             )
 

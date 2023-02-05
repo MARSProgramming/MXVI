@@ -1,6 +1,5 @@
 package frc.robot.auto.plays.Red;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,11 +20,11 @@ public class RtP1P2_Dock extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 14.71, 4.37, 0),
             new ParallelCommandGroup(
-                new DriveAtPath(drivetrain, MarkertoP1, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, P1toMarker, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, MarkertoP2, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, P2toMarker, new Rotation2d(0), 10),
-                new DriveAtPath(drivetrain, MarkerToDock, new Rotation2d(0), 10)
+                new DriveAtPath(drivetrain, MarkertoP1, 0, 10),
+                new DriveAtPath(drivetrain, P1toMarker, 0, 10),
+                new DriveAtPath(drivetrain, MarkertoP2, 0, 10),
+                new DriveAtPath(drivetrain, P2toMarker, 0, 10),
+                new DriveAtPath(drivetrain, MarkerToDock, 0, 10)
 
             )
 
