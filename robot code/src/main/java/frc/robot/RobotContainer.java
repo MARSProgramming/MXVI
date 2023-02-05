@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
 import frc.robot.util.CustomXboxController;
@@ -31,6 +32,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
   private final DrivetrainSubsystem mDrivetrainSubsystem = new DrivetrainSubsystem();
+  private final Arm mArm = new Arm();
 
   private final CustomXboxController mPilot = new CustomXboxController(0);
 

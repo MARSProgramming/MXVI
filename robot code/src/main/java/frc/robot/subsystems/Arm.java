@@ -26,8 +26,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class Arm extends SubsystemBase{
-    private WPI_TalonFX mElbow;
-    private WPI_TalonFX mShoulder;
+    private WPI_TalonFX mElbow = new WPI_TalonFX(Constants.Arm.kElbowMotorID);
+    private WPI_TalonFX mShoulder = new WPI_TalonFX(Constants.Arm.kShoulderMotorID);
 
   // distance per pulse = (angle per revolution) / (pulses per revolution)
   //  = (2 * PI rads) / (2048 pulses)
@@ -109,9 +109,6 @@ public class Arm extends SubsystemBase{
             new Color8Bit(Color.kGray)));
 
     public Arm(){
-        mElbow = new WPI_TalonFX(Constants.Arm.kElbowMotorID);
-        mShoulder = new WPI_TalonFX(Constants.Arm.kShoulderMotorID);
-
         TalonFXConfiguration config = new TalonFXConfiguration();
         mElbow.configAllSettings(config);
         mShoulder.configAllSettings(config);
