@@ -19,30 +19,39 @@ public class Arm extends SubsystemBase implements Loggable{
         
     public Arm(){
 
-        mElbow = new TalonFX(Constants.Arm.kElbowMotorID);
-        mShoulder = new TalonFX(Constants.Arm.kShoulderMotorID);
-        mWrist = new TalonFX(Constants.Arm.kWristMotorID);
-
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        mElbow.configAllSettings(config);
-        mShoulder.configAllSettings(config);
-        mWrist.configAllSettings(config);
-
         mElbow.setNeutralMode(NeutralMode.Brake);
         mShoulder.setNeutralMode(NeutralMode.Brake);
         mWrist.setNeutralMode(NeutralMode.Brake);
+        mWrist.config_kP(0, kP);
+        mWrist.config_kI(0, kI);
+        mWrist.config_kD(0, kI);
+        mWrist.set(ControlMode.Position, 0);
+       
     }
 
     public void runElbowPOutput(double v){
         mElbow.set(ControlMode.PercentOutput, v);
     }
 
+    public void setElbowPosition(double v){
+        mElbow.set(ControlMode.Position, v * 177);
+    }
+
+
     public void runShoulderPOutput(double v){
         mShoulder.set(ControlMode.PercentOutput, v);
     }
 
+    public void setShoulderPosition(double v){
+        mShoulder.set(ControlMode.Position, v * 177);
+    }
+
     public void runWristPOutput(double v){
         mWrist.set(ControlMode.PercentOutput, v);
+    }
+
+    public void setWristPosition(double v){
+        mWrist.set(ControlMode.Position, v * 177);
     }
 
     @Override
