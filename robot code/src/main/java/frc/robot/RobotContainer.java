@@ -17,9 +17,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
+import frc.robot.commands.IntakeRunCommand;
+import frc.robot.commands.IntakeToggleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.util.AutoChooser;
 import frc.robot.util.CustomXboxController;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +41,7 @@ public class RobotContainer {
   private HashMap<String, Pose2d> mPointPositionMap;
   private AutoChooser autoChooser = new AutoChooser(mDrivetrainSubsystem);
 
+  private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -60,6 +65,7 @@ public class RobotContainer {
     mPointPositionMap = new HashMap<>();
     mPointPositionMap.put("A", new Pose2d(0, 0, new Rotation2d(Math.toRadians(0.0))));
     configureTeleopBindings();
+    
   }
 
   /**
@@ -73,10 +79,13 @@ public class RobotContainer {
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
+    new  Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(new IntakeRunCommand(mIntakeSubsystem, () -> mPilot.getLeftTriggerAxis()));
+    mPilot.getRightTriggerObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
     System.out.println("Teleop Bindings Configured");
   }
 
   public void configureTestBindings(){
+    mPilot.getBButtonObject().whileTrue(new IntakeToggleCommand(mIntakeSubsystem));
     System.out.println("Test Bindings Configured");
   }
   /**
