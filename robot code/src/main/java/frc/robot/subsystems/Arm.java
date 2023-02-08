@@ -7,12 +7,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class Arm extends SubsystemBase{
+public class Arm extends SubsystemBase implements Loggable{
     private TalonFX mElbow;
     private TalonFX mShoulder;
     private TalonFX mWrist;
+    @Log
     private double wristPosition;
         
     public Arm(){
