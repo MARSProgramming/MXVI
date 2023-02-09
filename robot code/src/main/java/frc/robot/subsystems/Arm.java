@@ -1,29 +1,28 @@
 package frc.robot.subsystems;
 
+import org.ejml.simple.SimpleMatrix;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase{
     private WPI_TalonFX mElbow = new WPI_TalonFX(Constants.Arm.kElbowMotorID);
@@ -44,15 +43,15 @@ public class Arm extends SubsystemBase{
   private static final double kUpperArmMass = 3.19; //Kilograms. TODO: what is the mass of upper arm in kg?
   private static final double kUpperArmLength = Units.inchesToMeters(23); //TODO: what is the length of the upper arm in inches?
   private static final double kElbowGearRatio = 53; //Gear ratio for both joints is 53:1
-  private static final double kLowerArmMass = 3.19; //Kilograms. TODO: what is the mass of lower arm in kg?
+  private static final double kLowerArmMass = 2.49; //Kilograms. TODO: what is the mass of lower arm in kg?
   private static final double kLowerArmLength = Units.inchesToMeters(23); //TODO: what is the length of the lower arm in inches?
-  private static final double kWristMass = 2.0; // Kilograms. TODO: what is the mass of wrist in kg?
+  private static final double kWristMass = 1.75; // Kilograms. TODO: what is the mass of wrist in kg?
   private static final double kWristLength = Units.inchesToMeters(8); //TODO: what is the length of the wrist?
 
-  private static final int k_upper_arm_min_angle = -180; 
-  private static final int k_upper_arm_max_angle = 260; 
-  private static final int k_lower_arm_min_angle = -90; 
-  private static final int k_lower_arm_max_angle = 190; 
+  private static final int k_upper_arm_min_angle = -36000000; 
+  private static final int k_upper_arm_max_angle = 36000000; 
+  private static final int k_lower_arm_min_angle = -36000000; 
+  private static final int k_lower_arm_max_angle = 36000000; 
 
   SingleJointedArmSim m_upperArmSim = new SingleJointedArmSim(
     DCMotor.getFalcon500(1),  //1 Falcon 500 controls the upper arm.
@@ -62,7 +61,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_upper_arm_min_angle),
     Units.degreesToRadians(k_upper_arm_max_angle),
     kUpperArmMass,
-    true,
+    false,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -74,7 +73,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_lower_arm_min_angle),
     Units.degreesToRadians(k_lower_arm_max_angle),
     kLowerArmMass+kWristMass,
-    true,
+    false,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -95,19 +94,10 @@ public class Arm extends SubsystemBase{
       m_upperArm.append(
           new MechanismLigament2d(
               "LowerArm",
-              28.5,
+              23,
               Units.radiansToDegrees(m_lowerArmSim.getAngleRads()),
               10,
               new Color8Bit(Color.kPurple)));
-  private final MechanismLigament2d m_wrist =
-      m_lowerArm.append(
-          new MechanismLigament2d(
-            "Wrist",
-            Units.metersToInches(kWristLength),
-            0,
-            20,
-            new Color8Bit(Color.kGray)));
-
     public Arm(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         mElbow.configAllSettings(config);
@@ -115,6 +105,12 @@ public class Arm extends SubsystemBase{
 
         mElbow.setNeutralMode(NeutralMode.Brake);
         mShoulder.setNeutralMode(NeutralMode.Brake);
+
+        mElbow.config_kP(0, 0.1);
+        mElbow.config_kI(0, 0.0003);
+
+        mShoulder.config_kP(0, 0.03);
+        mShoulder.config_kI(0, 0.0001);
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
         m_armTower.setColor(new Color8Bit(Color.kBlue));    
@@ -140,6 +136,73 @@ public class Arm extends SubsystemBase{
   
       SmartDashboard.putNumber("Elbow Position (ticks)", mElbow.getSelectedSensorPosition());
       SmartDashboard.putNumber("Elbow Position (deg)", Units.radiansToDegrees(nativeUnitsToRotationRad(mElbow.getSelectedSensorPosition())));
+    }
+
+    public double getShoulderPosition(){
+      return Units.radiansToDegrees(nativeUnitsToRotationRad(mShoulder.getSelectedSensorPosition()));
+    }
+
+    public double getElbowPosition(){
+        return Units.radiansToDegrees(nativeUnitsToRotationRad(mElbow.getSelectedSensorPosition()));
+    }
+
+    public void goToAngles(double a1, double a2){
+      mElbow.set(ControlMode.Position, rotationToNativeUnits(a1));
+      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a2));
+    }
+
+    public void goToPoint(){
+      double x = 0.0;
+      double y = 0.3;
+      double theta1 = 0;
+      double theta2 = 0;
+
+      if (Math.pow(x,2) + Math.pow(y,2) > Math.pow((kLowerArmLength + kUpperArmLength), 2)){
+        theta1 = Math.toRadians(getShoulderPosition());
+        theta2 = Math.toRadians(getElbowPosition());
+      }
+      else{
+        double c2 = (Math.pow(x,2) + Math.pow(y,2) - Math.pow(kLowerArmLength,2) - Math.pow(kUpperArmLength,2)) / (2 * kLowerArmLength * kUpperArmLength);
+        double s2 = Math.sqrt(1 - Math.pow(c2,2));
+        theta2 = Math.atan2(s2, c2);
+        double k1 = kUpperArmLength + kLowerArmLength * c2;
+        double k2 = kLowerArmLength * s2;
+        theta1 = Math.atan2(y, x) - Math.atan2(k2, k1);
+      }
+      goToAngles(theta2, theta1);
+    }
+
+    public void runAtVelocity(double xdot, double ydot){
+      double l1 = kLowerArmLength;
+      double l2 = kUpperArmLength;
+
+      double th = Units.degreesToRadians(getShoulderPosition()) + 0.000001;
+      double phi = Units.degreesToRadians(getElbowPosition()) + 0.0000001;
+
+      System.out.println("adj ang " + th + " " + (th + phi));
+
+      double a = -l1 * Math.sin(th) - l2 * Math.sin(th + phi);
+      double b = -l2 * Math.sin(th + phi);
+      double c = l1 * Math.cos(th) + l2 * Math.cos(th + phi);
+      double d = l2 * Math.cos(th + phi);
+
+      System.out.println(th + " " + phi);
+
+      double[][] Adouble = {{a, b}, {c, d}};
+      SimpleMatrix A = new SimpleMatrix(Adouble);
+      
+      SimpleMatrix Xd = new SimpleMatrix(2, 1);
+      Xd.set(0, 0, xdot);
+      Xd.set(1, 0, ydot);
+
+      System.out.println(A.invert());
+      SimpleMatrix B = A.invert().mult(Xd);
+      System.out.println(B);
+      mShoulder.set(ControlMode.PercentOutput, -B.get(0, 0));
+      mElbow.set(ControlMode.PercentOutput, -B.get(1, 0));
+      SmartDashboard.putNumber("B", Units.radiansToDegrees(-B.get(0, 0)));
+      SmartDashboard.putNumber("A", Units.radiansToDegrees(-B.get(1, 0)));
+      //System.out.println("B " + -B.get(0, 0) + " " + -B.get(1, 0));
     }
 
     @Override
@@ -213,3 +276,4 @@ public class Arm extends SubsystemBase{
         return positionRads;
       }
 }
+

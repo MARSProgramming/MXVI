@@ -79,7 +79,7 @@ public final class Constants {
     }
 
     public static class Arm{
-        public static final int kElbowMotorID = -1;
-        public static final int kShoulderMotorID = -1;
+        public static final int kElbowMotorID = 8;
+        public static final int kShoulderMotorID = 9;
     }
 }
