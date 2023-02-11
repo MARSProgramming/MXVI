@@ -9,7 +9,9 @@ import java.util.HashMap;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,8 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
-import frc.robot.commands.IntakeRunCommand;
-import frc.robot.commands.IntakeToggleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.util.AutoChooser;
@@ -34,6 +34,7 @@ import frc.robot.util.CustomXboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private Compressor mCompressor = new Compressor(63, PneumaticsModuleType.REVPH);
   
   private final DrivetrainSubsystem mDrivetrainSubsystem = new DrivetrainSubsystem();
 
@@ -47,6 +48,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    mCompressor.enableAnalog(100, 110);
+
     /*mDrivetrainSubsystem.setDefaultCommand(new DriveSnapRotation(
             mDrivetrainSubsystem,
             () -> -modifyAxis(mPilot.getLeftY()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
@@ -65,7 +68,6 @@ public class RobotContainer {
     SmartDashboard.putData(CommandScheduler.getInstance());
     mPointPositionMap = new HashMap<>();
     mPointPositionMap.put("A", new Pose2d(0, 0, new Rotation2d(Math.toRadians(0.0))));
-    configureTeleopBindings();
     
   }
 
@@ -80,13 +82,12 @@ public class RobotContainer {
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
-    new  Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(new IntakeRunCommand(mIntakeSubsystem, () -> mPilot.getLeftTriggerAxis()));
-    mPilot.getRightTriggerObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
     System.out.println("Teleop Bindings Configured");
   }
 
   public void configureTestBindings(){
-    mPilot.getBButtonObject().whileTrue(new IntakeToggleCommand(mIntakeSubsystem));
+    new Trigger(() -> mPilot.getRightTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
+    mPilot.getBButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
     System.out.println("Test Bindings Configured");
   }
   /**
