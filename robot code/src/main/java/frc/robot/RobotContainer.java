@@ -9,19 +9,28 @@ import java.util.HashMap;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ExtendBottomSolenoids;
+import frc.robot.commands.ExtendClaw;
+import frc.robot.commands.ExtendPaddleSolenoid;
+import frc.robot.commands.IntakeToggleCommand;
+import frc.robot.commands.RetractBottomSolenoids;
+import frc.robot.commands.RetractClaw;
+import frc.robot.commands.RetractPaddleSolenoid;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
-import frc.robot.commands.IntakeRunCommand;
-import frc.robot.commands.IntakeToggleCommand;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.BottomSolenoids;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Paddle;
 import frc.robot.util.AutoChooser;
 import frc.robot.util.CustomXboxController;
 
@@ -43,6 +52,19 @@ public class RobotContainer {
   private AutoChooser autoChooser = new AutoChooser(mDrivetrainSubsystem);
 
   private final IntakeSubsystem mIntakeSubsystem = new IntakeSubsystem();
+  private final BottomSolenoids mBottomSolenoids = new BottomSolenoids();
+  private final Arm mArm = new Arm();
+  private final Paddle mPaddle = new Paddle();
+
+  private final Compressor mCompressor = new Compressor(61, PneumaticsModuleType.REVPH);
+
+  public double getPressure(){
+    return mCompressor.getPressure();
+  }
+
+  public void startCompressor(){
+    mCompressor.enableAnalog(100, 110);
+  }
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -80,13 +102,19 @@ public class RobotContainer {
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
-    new  Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(new IntakeRunCommand(mIntakeSubsystem, () -> mPilot.getLeftTriggerAxis()));
-    mPilot.getRightTriggerObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
+    //new  Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(new IntakeRunCommand(mIntakeSubsystem, () -> mPilot.getLeftTriggerAxis()));
+    //mPilot.getRightTriggerObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
     System.out.println("Teleop Bindings Configured");
   }
 
   public void configureTestBindings(){
-    mPilot.getBButtonObject().whileTrue(new IntakeToggleCommand(mIntakeSubsystem));
+    mPilot.getBButtonObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
+    mPilot.getLeftTriggerObject().onTrue(new ExtendBottomSolenoids(mBottomSolenoids));
+    mPilot.getRightTriggerObject().onTrue(new RetractBottomSolenoids(mBottomSolenoids));
+    mPilot.getLeftBumperObject().onTrue(new ExtendClaw(mArm));
+    mPilot.getRightBumperObject().onTrue(new RetractClaw(mArm));
+    mPilot.getXButtonObject().onTrue(new ExtendPaddleSolenoid(mPaddle));
+    mPilot.getYButtonObject().onTrue(new RetractPaddleSolenoid(mPaddle));
     System.out.println("Test Bindings Configured");
   }
   /**

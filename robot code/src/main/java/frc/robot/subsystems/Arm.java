@@ -1,21 +1,19 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Arm extends SubsystemBase{
-    private TalonFX mElbow;
+    private DoubleSolenoid mSolenoid = new DoubleSolenoid(61, PneumaticsModuleType.REVPH, 0, 4);
+    /*private TalonFX mElbow;
     private TalonFX mShoulder;
 
-    private double talonFXSensorCoefficient = 2048;
+    private double talonFXSensorCoefficient = 2048;*/
     public Arm(){
-        mElbow = new TalonFX(Constants.Arm.kElbowMotorID);
+        /*mElbow = new TalonFX(Constants.Arm.kElbowMotorID);
         mShoulder = new TalonFX(Constants.Arm.kShoulderMotorID);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -38,10 +36,24 @@ public class Arm extends SubsystemBase{
         mShoulder.config_kF(0, 0.0);
 
         mElbow.setNeutralMode(NeutralMode.Brake);
-        mShoulder.setNeutralMode(NeutralMode.Brake);
+        mShoulder.setNeutralMode(NeutralMode.Brake);*/
     }
 
-    public void setShoulderAngle(double deg){
+    public void extend(){
+        mSolenoid.set(Value.kForward);
+    }
+    public void retract(){
+        mSolenoid.set(Value.kReverse);
+    }
+    public void toggle(){
+        mSolenoid.toggle();
+    }
+
+    @Override
+    public void periodic() {
+      SmartDashboard.putString("ClawSolenoidState", mSolenoid.get().toString());
+    }
+    /*public void setShoulderAngle(double deg){
         mShoulder.set(ControlMode.Position, deg * talonFXSensorCoefficient);
     }
 
@@ -55,5 +67,5 @@ public class Arm extends SubsystemBase{
 
     public void runShoulderPOutput(double v){
         mShoulder.set(ControlMode.PercentOutput, v);
-    }
+    }*/
 }
