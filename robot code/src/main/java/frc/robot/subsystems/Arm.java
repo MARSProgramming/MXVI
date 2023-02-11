@@ -107,10 +107,10 @@ public class Arm extends SubsystemBase{
         mShoulder.setNeutralMode(NeutralMode.Brake);
 
         mElbow.config_kP(0, 0.1);
-        mElbow.config_kI(0, 0.0003);
+        mElbow.config_kI(0, 0.0);
 
-        mShoulder.config_kP(0, 0.03);
-        mShoulder.config_kI(0, 0.0001);
+        mShoulder.config_kP(0, 0.1);
+        mShoulder.config_kI(0, 0.0);
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
         m_armTower.setColor(new Color8Bit(Color.kBlue));    
@@ -198,8 +198,8 @@ public class Arm extends SubsystemBase{
       System.out.println(A.invert());
       SimpleMatrix B = A.invert().mult(Xd);
       System.out.println(B);
-      mShoulder.set(ControlMode.PercentOutput, -B.get(0, 0));
-      mElbow.set(ControlMode.PercentOutput, -B.get(1, 0));
+      mShoulder.set(ControlMode.Velocity, -B.get(0, 0) * 2048 * k100msPerSecond / 2 / Math.PI);
+      mElbow.set(ControlMode.Velocity, -B.get(1, 0) * 2048 * k100msPerSecond / 2 / Math.PI);
       SmartDashboard.putNumber("B", Units.radiansToDegrees(-B.get(0, 0)));
       SmartDashboard.putNumber("A", Units.radiansToDegrees(-B.get(1, 0)));
       //System.out.println("B " + -B.get(0, 0) + " " + -B.get(1, 0));
