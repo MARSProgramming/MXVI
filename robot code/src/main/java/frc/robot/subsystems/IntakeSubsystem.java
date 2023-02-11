@@ -24,6 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
         mSolenoid.set(Value.kReverse);
       }
       public void toggle(){
+        if(mSolenoid.get() == Value.kOff){mSolenoid.set(Value.kReverse);}
          mSolenoid.toggle();
       }
     public void RunMotors(double voltage) {
