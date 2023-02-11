@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase{
@@ -48,6 +49,15 @@ public class Arm extends SubsystemBase{
     public void toggle(){
         if(mSolenoid.get() == Value.kOff){mSolenoid.set(Value.kReverse);}
         mSolenoid.toggle();
+    }
+    public CommandBase toggleClaw() {
+        return runOnce(
+            () -> {
+            if (mSolenoid.get()==Value.kOff)
+                mSolenoid.set(Value.kReverse); 
+            else
+                mSolenoid.toggle();
+        }).withName("Test Claw Pneumatics");
     }
 
     @Override

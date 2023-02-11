@@ -16,14 +16,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ExtendBottomSolenoids;
-import frc.robot.commands.ExtendClaw;
-import frc.robot.commands.ExtendPaddleSolenoid;
-import frc.robot.commands.IntakeToggleCommand;
-import frc.robot.commands.RetractBottomSolenoids;
-import frc.robot.commands.RetractClaw;
-import frc.robot.commands.RetractPaddleSolenoid;
+import frc.robot.commands.Intake;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
 import frc.robot.subsystems.Arm;
@@ -98,23 +93,26 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureTeleopBindings() {
-    //mPilot.getYButtonObject().onTrue(new ResetDrivePose(mDrivetrainSubsystem, 0.0, 0.0, 0.0));
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
-    //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
-    //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
-    //new  Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(new IntakeRunCommand(mIntakeSubsystem, () -> mPilot.getLeftTriggerAxis()));
-    //mPilot.getRightTriggerObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
+   // mPilot.getRightTriggerObject().onTrue(new Intake(mIntakeSubsystem));
+
     System.out.println("Teleop Bindings Configured");
   }
 
   public void configureTestBindings(){
-    mPilot.getBButtonObject().onTrue(new IntakeToggleCommand(mIntakeSubsystem));
-    mPilot.getLeftTriggerObject().onTrue(new ExtendBottomSolenoids(mBottomSolenoids));
-    mPilot.getRightTriggerObject().onTrue(new RetractBottomSolenoids(mBottomSolenoids));
-    mPilot.getLeftBumperObject().onTrue(new ExtendClaw(mArm));
-    mPilot.getRightBumperObject().onTrue(new RetractClaw(mArm));
-    mPilot.getXButtonObject().onTrue(new ExtendPaddleSolenoid(mPaddle));
-    mPilot.getYButtonObject().onTrue(new RetractPaddleSolenoid(mPaddle));
+    
+    //Claw solenoid command(s)
+    mPilot.getYButtonObject().onTrue(mArm.toggleClaw());
+
+    //Bottom Solenoid command(s)
+    mPilot.getXButtonObject().onTrue(mBottomSolenoids.toggleBottomSolenoid());
+
+    //Paddle command(s)
+    mPilot.getBButtonObject().onTrue(mPaddle.togglePaddle());
+
+    //Intake command(s)
+    mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
+    new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
     System.out.println("Test Bindings Configured");
   }
   /**

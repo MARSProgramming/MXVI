@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Paddle extends SubsystemBase{
@@ -19,10 +20,16 @@ public class Paddle extends SubsystemBase{
     public void retract(){
         mSolenoid.set(Value.kReverse);
     }
-    public void toggle(){
-        if(mSolenoid.get() == Value.kOff){mSolenoid.set(Value.kForward);}
-        mSolenoid.toggle();
-    }
+
+    public CommandBase togglePaddle() {
+        return runOnce(
+          () -> {
+            if (mSolenoid.get()==Value.kOff)
+              mSolenoid.set(Value.kForward); 
+            else
+              mSolenoid.toggle();
+          }).withName("Test Paddle Pneumatics");
+      }
 
     @Override
     public void periodic() {
