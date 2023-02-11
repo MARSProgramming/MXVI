@@ -46,6 +46,7 @@ public class Arm extends SubsystemBase{
         mSolenoid.set(Value.kReverse);
     }
     public void toggle(){
+        if(mSolenoid.get() == Value.kOff){mSolenoid.set(Value.kReverse);}
         mSolenoid.toggle();
     }
 

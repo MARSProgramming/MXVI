@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
     private DoubleSolenoid mSolenoid = new DoubleSolenoid(61, PneumaticsModuleType.REVPH, 2, 6);
-    private TalonFX Motor0 = new TalonFX(12, "Drivetrain");
+    private TalonFX Motor0 = new TalonFX(12);
     public IntakeSubsystem() {
         Motor0.setNeutralMode(NeutralMode.Coast);
         Motor0.setInverted(false);
