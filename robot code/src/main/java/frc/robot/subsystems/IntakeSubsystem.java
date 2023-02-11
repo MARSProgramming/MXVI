@@ -40,6 +40,6 @@ public class IntakeSubsystem extends SubsystemBase {
       SmartDashboard.putString("IntakeSolenoid State", mSolenoid.get().toString());
     }
     public void runIntakePOutput(double d) {
-      
+      Motor0.set(ControlMode.PercentOutput, d);
     }
 }
