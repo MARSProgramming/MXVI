@@ -22,6 +22,7 @@ import frc.robot.auto.plays.Blue.BTopLeaveCommunity;
 import frc.robot.auto.plays.Blue.BbP3P4_Dock;
 import frc.robot.auto.plays.Blue.BbP3P4_NoDock;
 import frc.robot.auto.plays.Blue.BbP3_Dock;
+import frc.robot.auto.plays.Blue.BbP3_NoDock;
 import frc.robot.auto.plays.Blue.BbP4_Dock;
 import frc.robot.auto.plays.Blue.BbP4_NoDock;
 import frc.robot.auto.plays.Blue.BbScoreGiven;
@@ -40,9 +41,12 @@ import frc.robot.auto.plays.Red.RSetTopPose;
 import frc.robot.auto.plays.Red.RTopLeaveCommunity;
 import frc.robot.auto.plays.Red.RbP3P4_NoDock;
 import frc.robot.auto.plays.Red.RbP3_Dock;
+import frc.robot.auto.plays.Red.RbP3_NoDock;
 import frc.robot.auto.plays.Red.RbP4_Dock;
 import frc.robot.auto.plays.Red.RbP4_NoDock;
 import frc.robot.auto.plays.Red.RbScoreGiven;
+import frc.robot.auto.plays.Red.RtP1P2_Dock;
+import frc.robot.auto.plays.Red.RtP1P2_NoDock;
 import frc.robot.auto.plays.Red.RtP1_Dock;
 import frc.robot.auto.plays.Red.RtP1_NoDock;
 import frc.robot.auto.plays.Red.RtP2_Dock;
@@ -57,15 +61,16 @@ public class AutoChooser {
     public AutoChooser(DrivetrainSubsystem mDrivetrainSubsystem){
         preMatch = Shuffleboard.getTab("Pre-Match");
         autoChooser = new SendableChooser<>();
-
         //auto plays
         autoChooser.setDefaultOption("Do Nothing", new DoNothing());
         autoChooser.addOption("BLUE-BOTTOM: Set Pose", new BSetBottomPose(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Leave Community", new BBottomLeaveCommunity(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Score Piece 3, Dock", new BbP3_Dock(mDrivetrainSubsystem));
-        autoChooser.addOption("BLUE-BOTTOM: Score Piece 3, No Dock", new BbP3P4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-BOTTOM: Score Piece 3, No Dock", new BbP3_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Score Piece 4, Dock", new BbP4_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Score Piece 4, No Dock", new BbP4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-BOTTOM: Score Piece 3 and 4, No Dock", new BbP3P4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-BOTTOM: Score Piece 3 and 4, Dock", new BbP3P4_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Score Given Piece", new BbScoreGiven(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-BOTTOM: Score Given Piece, Leave Community", new BbScoreGivenLeave(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-MIDDLE: Set Pose", new BSetMidPose(mDrivetrainSubsystem));
@@ -76,14 +81,18 @@ public class AutoChooser {
         autoChooser.addOption("BLUE-TOP: Score Piece 1, No Dock", new BtP1_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Score Piece 2, Dock", new BtP2_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Score Piece 2, No Dock", new BtP2_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-TOP: Score Piece 1 and 2, Dock", new BtP2_Dock(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-TOP: Score Piece 1 and 2, No Dock", new BtP2_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Score Given Piece", new BtScoreGiven(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Score Given Piece, Leave Community", new BtScoreGivenLeave(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Set Pose", new RSetBottomPose(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Leave Community", new RBottomLeaveCommunity(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Score Piece 3, Dock", new RbP3_Dock(mDrivetrainSubsystem));
-        autoChooser.addOption("RED-BOTTOM: Score Piece 3, No Dock", new RbP3P4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("RED-BOTTOM: Score Piece 3, No Dock", new RbP3_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Score Piece 4, Dock", new RbP4_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Score Piece 4, No Dock", new RbP4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("RED-BOTTOM: Score Piece 3 and 4, No Dock", new RbP3P4_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("RED-BOTTOM: Score Piece 3 and 4, Dock", new RbP4_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Score Given Piece", new RbScoreGiven(mDrivetrainSubsystem));
         autoChooser.addOption("RED-BOTTOM: Score Given Piece, Leave Community", new BbScoreGivenLeave(mDrivetrainSubsystem));
         autoChooser.addOption("RED-MIDDLE: Set Pose", new RSetMidPose(mDrivetrainSubsystem));
@@ -94,6 +103,8 @@ public class AutoChooser {
         autoChooser.addOption("RED-TOP: Score Piece 1, No Dock", new RtP1_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-TOP: Score Piece 2, Dock", new RtP2_Dock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-TOP: Score Piece 2, No Dock", new RtP2_NoDock(mDrivetrainSubsystem));
+        autoChooser.addOption("RED-TOP: Score Piece 1 and 2, Dock", new RtP1P2_Dock(mDrivetrainSubsystem));
+        autoChooser.addOption("RED-TOP: Score Piece 1 and 2, No Dock", new RtP1P2_NoDock(mDrivetrainSubsystem));
         autoChooser.addOption("RED-TOP: Score Given Piece", new RtScoreGiven(mDrivetrainSubsystem));
         autoChooser.addOption("RED-TOP: Score Given Piece, Leave Community", new BtScoreGivenLeave(mDrivetrainSubsystem));
 
