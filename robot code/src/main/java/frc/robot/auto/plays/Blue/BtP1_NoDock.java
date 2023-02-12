@@ -17,11 +17,20 @@ public class BtP1_NoDock extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
             new ParallelCommandGroup(
-                new DriveAtPath(drivetrain, MarkertoP1, 0, 10),
+                new DriveAtPath(drivetrain, MarkertoP1, 0, 10)
+                // Code for extending intake
+                // Code for retracting intake
+                // Move arm to retrieve game piece, and open claw
+                // Once in position, close claw
+                // Make any readjustments necessary for making sure the piece is secure
+            ),
+            new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, P1toMarker, 0, 10)
-
+                // Move arm (if necessary) to position game piece for scoring
+                // Open claw
+                // Move arm into "default" position
+                // Any changes to prepare for teleop here
             )
-
         );
     }
 }
