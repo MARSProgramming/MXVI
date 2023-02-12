@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.ejml.simple.SimpleMatrix;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -153,16 +154,20 @@ public class Arm extends SubsystemBase{
     }
 
     public void goToAngles(double a1, double a2){
-      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a1));
-      mElbow.set(ControlMode.Position, rotationToNativeUnits(a2));
+      goToShoulder(a1);
+      goToElbow(a2);
     }
 
     public void goToShoulder(double a){
-      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a));
+      double radians = java.lang.Math.toRadians(getShoulderPosition());
+      double cosineScalar = java.lang.Math.cos(radians);
+      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a), DemandType.ArbitraryFeedForward, cosineScalar * 0.05);
     }
 
     public void goToElbow(double a){
-      mElbow.set(ControlMode.Position, rotationToNativeUnits(a));
+      double radians = java.lang.Math.toRadians(getElbowPosition());
+      double cosineScalar = java.lang.Math.cos(radians);
+      mElbow.set(ControlMode.Position, rotationToNativeUnits(a), DemandType.ArbitraryFeedForward, cosineScalar * 0.05);
     }
 
     public void goToPoint(){
