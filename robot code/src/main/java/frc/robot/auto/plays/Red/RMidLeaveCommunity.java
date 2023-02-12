@@ -16,6 +16,7 @@ public class RMidLeaveCommunity extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 14.71, 2.69, 0),
             new ParallelCommandGroup(
+                // Any changes to make sure arm is secure here
                 new DriveAtPath(drivetrain, LeaveCommunity, 0, 10)
             )
 

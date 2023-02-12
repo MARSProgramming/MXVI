@@ -112,7 +112,7 @@ public class RobotContainer {
 
     //Intake command(s)
     mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
-    new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
+    new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.RunMotors(() -> mPilot.getRightTriggerAxis()));
     System.out.println("Test Bindings Configured");
   }
   /**

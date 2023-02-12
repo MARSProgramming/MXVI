@@ -14,8 +14,10 @@ public class RbScoreGiven extends SequentialCommandGroup{
         addCommands(
             new ResetDrivePose(drivetrain, 14.71, 4.36, 0),
             new ParallelCommandGroup(
+                // Move the arm to scoring position
                 // Add stuff here to score given piece
-            )
+                // Possibly add stuff here to move bot to an ideal position            
+                )
          );
     }
 }

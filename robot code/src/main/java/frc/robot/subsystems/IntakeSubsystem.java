@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
     private DoubleSolenoid mSolenoid = new DoubleSolenoid(61, PneumaticsModuleType.REVPH, 2, 6);
@@ -41,5 +42,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public void runIntakePOutput(double d) {
       Motor0.set(ControlMode.PercentOutput, d);
+    }
+    public Command toggleIntake() {
+        return null;
+    }
+    public Command runIntakeMotors(Object object) {
+        return null;
     }
 }
