@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     Logger.configureLoggingAndConfig(m_robotContainer, false);
     m_robotContainer.startCompressor();
+    m_robotContainer.initializeSolenoids();
   }
 
   @Override

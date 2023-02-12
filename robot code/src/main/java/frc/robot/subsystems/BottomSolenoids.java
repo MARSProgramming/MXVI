@@ -33,4 +33,8 @@ public class BottomSolenoids extends SubsystemBase {
     public void periodic() {
       SmartDashboard.putString("BottomSolenoidState", mSolenoid.get().toString());
     }
+
+    public void initializeSolenoid(){
+      mSolenoid.set(Value.kReverse);
+  }
 }

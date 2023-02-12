@@ -35,4 +35,8 @@ public class Paddle extends SubsystemBase{
     public void periodic() {
       SmartDashboard.putString("PaddleSolenoidState", mSolenoid.get().toString());
     }
+
+    public void initializeSolenoid(){
+        mSolenoid.set(Value.kForward);
+    }
 }

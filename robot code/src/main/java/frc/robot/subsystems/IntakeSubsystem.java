@@ -17,8 +17,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private TalonFX Motor0 = new TalonFX(12);
     public IntakeSubsystem() {
         Motor0.setNeutralMode(NeutralMode.Coast);
-        Motor0.setInverted(false);
-        mSolenoid.set(Value.kReverse);
+        Motor0.setInverted(true);
+        //mSolenoid.set(Value.kReverse);
     }
     public void extend(){
       mSolenoid.set(Value.kForward);
@@ -48,5 +48,9 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
       SmartDashboard.putString("IntakeSolenoid State", mSolenoid.get().toString());
+    }
+
+    public void initializeSolenoid(){
+      mSolenoid.set(Value.kForward);
     }
 }

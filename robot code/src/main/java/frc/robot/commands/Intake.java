@@ -17,7 +17,7 @@ public class Intake extends CommandBase{
 
     @Override
     public void execute(){
-        mIntake.runIntakePOutput(0.4);
+        mIntake.runIntakePOutput(0.9);
     }
 
     @Override

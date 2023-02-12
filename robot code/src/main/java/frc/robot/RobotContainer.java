@@ -16,11 +16,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Intake;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
+import frc.robot.commands.Arm.ManualElbowLeft;
+import frc.robot.commands.Arm.ManualElbowRight;
+import frc.robot.commands.Arm.ManualShoulderLeft;
+import frc.robot.commands.Arm.ManualShoulderRight;
+import frc.robot.commands.Arm.ManualWrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.BottomSolenoids;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -42,6 +46,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem mDrivetrainSubsystem = new DrivetrainSubsystem();
 
   private final CustomXboxController mPilot = new CustomXboxController(0);
+  private final CustomXboxController mCoPilot = new CustomXboxController(1);
 
   private HashMap<String, Pose2d> mPointPositionMap;
   private AutoChooser autoChooser = new AutoChooser(mDrivetrainSubsystem);
@@ -83,7 +88,13 @@ public class RobotContainer {
     mPointPositionMap = new HashMap<>();
     mPointPositionMap.put("A", new Pose2d(0, 0, new Rotation2d(Math.toRadians(0.0))));
     configureTeleopBindings();
-    
+  }
+
+  public void initializeSolenoids(){
+    mIntakeSubsystem.initializeSolenoid();
+    mPaddle.initializeSolenoid();
+    mArm.initializeSolenoid();
+    mBottomSolenoids.initializeSolenoid();
   }
 
   /**
@@ -94,6 +105,26 @@ public class RobotContainer {
    */
   public void configureTeleopBindings() {
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
+    mPilot.getLeftTriggerObject().whileTrue(new Intake(mIntakeSubsystem));
+
+    //Claw solenoid command(s)
+    mCoPilot.getYButtonObject().onTrue(mArm.toggleClaw());
+
+    //Bottom Solenoid command(s)
+    //mCoPilot.getXButtonObject().onTrue(mBottomSolenoids.toggleBottomSolenoid());
+
+    //Paddle command(s)
+    mCoPilot.getBButtonObject().onTrue(mPaddle.togglePaddle());
+
+    //Intake command(s)
+    mCoPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
+
+    mCoPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
+    mCoPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
+    mCoPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
+    mCoPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
+    mCoPilot.getXButtonObject().whileTrue(new ManualWrist(mArm));
+    //new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
    // mPilot.getRightTriggerObject().onTrue(new Intake(mIntakeSubsystem));
 
     System.out.println("Teleop Bindings Configured");
@@ -112,7 +143,7 @@ public class RobotContainer {
 
     //Intake command(s)
     mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
-    new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
+    //new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
     System.out.println("Test Bindings Configured");
   }
   /**
