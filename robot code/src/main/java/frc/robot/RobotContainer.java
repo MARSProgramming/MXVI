@@ -17,11 +17,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
+import frc.robot.commands.Arm.GoToAngles;
+import frc.robot.commands.Arm.GoToElbowFirst;
+import frc.robot.commands.Arm.GoToStart;
 import frc.robot.commands.Arm.ManualElbowLeft;
 import frc.robot.commands.Arm.ManualElbowRight;
 import frc.robot.commands.Arm.ManualShoulderLeft;
 import frc.robot.commands.Arm.ManualShoulderRight;
 import frc.robot.commands.Arm.MoveArmToPoint;
+import frc.robot.commands.Arm.StartToLoad;
+import frc.robot.commands.Arm.StartToScoreLeft;
+import frc.robot.commands.Arm.StartToScoreRight;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
@@ -78,11 +84,15 @@ public class RobotContainer {
   public void configureTeleopBindings() {
     //mPilot.getYButtonObject().onTrue(new ResetDrivePose(mDrivetrainSubsystem, 0.0, 0.0, 0.0));
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem));
-    mArm.setDefaultCommand(new MoveArmToPoint(mArm, () -> deadband(mPilot.getLeftX(), 0.15)/5, () -> deadband(mPilot.getLeftY(), 0.15)/5));
     mPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
     mPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
     mPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
     mPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
+    mPilot.getXButtonObject().whileTrue(new StartToScoreLeft(mArm));
+    mPilot.getYButtonObject().whileTrue(new StartToScoreRight(mArm));
+    mPilot.getAButtonObject().whileTrue(new GoToStart(mArm));
+    mPilot.getBButtonObject().whileTrue(new StartToLoad(mArm));
+
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
     System.out.println("Teleop Bindings Configured");

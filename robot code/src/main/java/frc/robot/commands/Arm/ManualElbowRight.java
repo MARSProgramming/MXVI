@@ -12,7 +12,7 @@ public class ManualElbowRight extends CommandBase{
 
     @Override
     public void execute(){
-        mArm.runElbowPOutput(0.5);
+        mArm.runElbowPOutput(0.1);
     }
 
     @Override

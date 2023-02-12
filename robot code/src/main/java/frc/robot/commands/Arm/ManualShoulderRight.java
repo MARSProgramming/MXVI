@@ -12,7 +12,7 @@ public class ManualShoulderRight extends CommandBase{
 
     @Override
     public void execute(){
-        mArm.runShoulderPOutput(0.5);
+        mArm.runShoulderPOutput(0.1);
     }
 
     @Override

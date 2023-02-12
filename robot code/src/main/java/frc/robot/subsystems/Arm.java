@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
@@ -61,7 +62,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_upper_arm_min_angle),
     Units.degreesToRadians(k_upper_arm_max_angle),
     kUpperArmMass,
-    false,
+    true,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -73,7 +74,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_lower_arm_min_angle),
     Units.degreesToRadians(k_lower_arm_max_angle),
     kLowerArmMass+kWristMass,
-    false,
+    true,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -81,7 +82,7 @@ public class Arm extends SubsystemBase{
   private final Mechanism2d m_mech2d = new Mechanism2d(60, 60);
   private final MechanismRoot2d m_armShoulder = m_mech2d.getRoot("ArmShoulder", 30, 30);
   private final MechanismLigament2d m_armTower =
-      m_armShoulder.append(new MechanismLigament2d("ArmTower", 30, -90));
+      m_armShoulder.append(new MechanismLigament2d("ArmTower", 23, -90));
   private final MechanismLigament2d m_upperArm =
       m_armShoulder.append(
           new MechanismLigament2d(
@@ -106,11 +107,16 @@ public class Arm extends SubsystemBase{
         mElbow.setNeutralMode(NeutralMode.Brake);
         mShoulder.setNeutralMode(NeutralMode.Brake);
 
-        mElbow.config_kP(0, 0.1);
+        mElbow.config_kP(0, 0.05);
         mElbow.config_kI(0, 0.0);
 
-        mShoulder.config_kP(0, 0.1);
+        mShoulder.config_kP(0, 0.05);
         mShoulder.config_kI(0, 0.0);
+
+        mShoulder.setSelectedSensorPosition(rotationToNativeUnits(-Math.PI/2));
+        mElbow.setSelectedSensorPosition(rotationToNativeUnits(Math.PI/2));
+        m_ShoulderSim.setIntegratedSensorRawPosition(rotationToNativeUnits(-Math.PI/2));
+        m_ElbowSim.setIntegratedSensorRawPosition(rotationToNativeUnits(Math.PI/2));
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
         m_armTower.setColor(new Color8Bit(Color.kBlue));    
@@ -147,8 +153,16 @@ public class Arm extends SubsystemBase{
     }
 
     public void goToAngles(double a1, double a2){
-      mElbow.set(ControlMode.Position, rotationToNativeUnits(a1));
-      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a2));
+      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a1));
+      mElbow.set(ControlMode.Position, rotationToNativeUnits(a2));
+    }
+
+    public void goToShoulder(double a){
+      mShoulder.set(ControlMode.Position, rotationToNativeUnits(a));
+    }
+
+    public void goToElbow(double a){
+      mElbow.set(ControlMode.Position, rotationToNativeUnits(a));
     }
 
     public void goToPoint(){
@@ -172,6 +186,29 @@ public class Arm extends SubsystemBase{
       goToAngles(theta2, theta1);
     }
 
+    public double[] getPosition(){
+      double l1 = kLowerArmLength;
+      double l2 = kUpperArmLength;
+      double[] pos = new double[2];
+      double th = Units.degreesToRadians(getShoulderPosition());
+      double phi = Units.degreesToRadians(getElbowPosition());
+
+      pos[0] = l1 * Math.cos(th) + l2 * Math.cos(th + phi);
+      pos[1] = l1 * Math.sin(th) + l2 * Math.sin(th + phi);
+
+      return pos;
+    }
+
+    public double[] getElbowJointPos(){
+      double x = kLowerArmLength * Math.cos(Units.degreesToRadians(getShoulderPosition()));
+      double y = kLowerArmLength * Math.sin(Units.degreesToRadians(getShoulderPosition()));
+
+      double[] pos = new double[2];
+      pos[0] = x;
+      pos[1] = y;
+      return pos;
+    }
+
     public void runAtVelocity(double xdot, double ydot){
       double l1 = kLowerArmLength;
       double l2 = kUpperArmLength;
@@ -192,14 +229,20 @@ public class Arm extends SubsystemBase{
       SimpleMatrix A = new SimpleMatrix(Adouble);
       
       SimpleMatrix Xd = new SimpleMatrix(2, 1);
-      Xd.set(0, 0, xdot);
-      Xd.set(1, 0, ydot);
+      Xd.set(0, 0, Math.copySign(Math.min(Math.abs(xdot), 0.01), -xdot));
+      Xd.set(1, 0, Math.copySign(Math.min(Math.abs(ydot), 0.01), -ydot));
 
       System.out.println(A.invert());
       SimpleMatrix B = A.invert().mult(Xd);
       System.out.println(B);
-      mShoulder.set(ControlMode.Velocity, -B.get(0, 0) * 2048 * k100msPerSecond / 2 / Math.PI);
-      mElbow.set(ControlMode.Velocity, -B.get(1, 0) * 2048 * k100msPerSecond / 2 / Math.PI);
+      if(getPosition()[1] > -0.5){
+        mShoulder.set(ControlMode.Velocity, -B.get(0, 0) * 2048 * k100msPerSecond / 2 / Math.PI * kShoulderGearRatio);
+        mElbow.set(ControlMode.Velocity, -B.get(1, 0) * 2048 * k100msPerSecond / 2 / Math.PI * kElbowGearRatio);
+      }
+      else{
+        mShoulder.set(ControlMode.PercentOutput, 0);
+        mElbow.set(ControlMode.PercentOutput, 0);
+      }
       SmartDashboard.putNumber("B", Units.radiansToDegrees(-B.get(0, 0)));
       SmartDashboard.putNumber("A", Units.radiansToDegrees(-B.get(1, 0)));
       //System.out.println("B " + -B.get(0, 0) + " " + -B.get(1, 0));
