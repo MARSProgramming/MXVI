@@ -77,12 +77,12 @@ public class RobotContainer {
    */
   public void configureTeleopBindings() {
     //mPilot.getYButtonObject().onTrue(new ResetDrivePose(mDrivetrainSubsystem, 0.0, 0.0, 0.0));
-    mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem));
-    mArm.setDefaultCommand(new MoveArmToPoint(mArm, () -> deadband(mPilot.getLeftX(), 0.15)/5, () -> deadband(mPilot.getLeftY(), 0.15)/5));
-    mPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
-    mPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
-    mPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
-    mPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
+    //mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem));
+//    mArm.setDefaultCommand(new MoveArmToPoint(mArm, () -> deadband(mPilot.getLeftX(), 0.15)/5, () -> deadband(mPilot.getLeftY(), 0.15)/5));
+//    mPilot.getAButtonObject().whileTrue(new ManualElbowLeft(mArm));
+//    mPilot.getBButtonObject().whileTrue(new ManualElbowRight(mArm));
+//    mPilot.getXButtonObject().whileTrue(new ManualShoulderLeft(mArm));
+//    mPilot.getYButtonObject().whileTrue(new ManualShoulderRight(mArm));
     //mPilot.getLeftTriggerObject().onTrue(new IntakeCommand(mIntake, 999));
     //mPilot.getAButtonObject().whileActiveContinuous(new DriveAtPath(mDrivetrainSubsystem, new Trajectory(mPointPositionMap.get("A")), mPointPositionMap.get("A").getRotation()));
     System.out.println("Teleop Bindings Configured");

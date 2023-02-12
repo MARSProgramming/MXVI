@@ -9,7 +9,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
@@ -27,6 +29,9 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase{
     private WPI_TalonFX mElbow = new WPI_TalonFX(Constants.Arm.kElbowMotorID);
     private WPI_TalonFX mShoulder = new WPI_TalonFX(Constants.Arm.kShoulderMotorID);
+
+    private final ProfiledPIDController mShoulderController = new ProfiledPIDController(20, 0, 0, new TrapezoidProfile.Constraints(2, 5));
+    private final ProfiledPIDController mElbowController = new ProfiledPIDController(5.8, 0, 0, new TrapezoidProfile.Constraints(2, 5));
 
   // distance per pulse = (angle per revolution) / (pulses per revolution)
   //  = (2 * PI rads) / (2048 pulses)
@@ -48,10 +53,10 @@ public class Arm extends SubsystemBase{
   private static final double kWristMass = 1.75; // Kilograms. TODO: what is the mass of wrist in kg?
   private static final double kWristLength = Units.inchesToMeters(8); //TODO: what is the length of the wrist?
 
-  private static final int k_upper_arm_min_angle = -36000000; 
-  private static final int k_upper_arm_max_angle = 36000000; 
-  private static final int k_lower_arm_min_angle = -36000000; 
-  private static final int k_lower_arm_max_angle = 36000000; 
+  private static final int k_upper_arm_min_angle = -360; 
+  private static final int k_upper_arm_max_angle = 360; 
+  private static final int k_lower_arm_min_angle = -360; 
+  private static final int k_lower_arm_max_angle = 360; 
 
   SingleJointedArmSim m_upperArmSim = new SingleJointedArmSim(
     DCMotor.getFalcon500(1),  //1 Falcon 500 controls the upper arm.
@@ -61,7 +66,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_upper_arm_min_angle),
     Units.degreesToRadians(k_upper_arm_max_angle),
     kUpperArmMass,
-    false,
+    true,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -73,7 +78,7 @@ public class Arm extends SubsystemBase{
     Units.degreesToRadians(k_lower_arm_min_angle),
     Units.degreesToRadians(k_lower_arm_max_angle),
     kLowerArmMass+kWristMass,
-    false,
+    true,
     VecBuilder.fill(kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
   );
 
@@ -98,7 +103,16 @@ public class Arm extends SubsystemBase{
               Units.radiansToDegrees(m_lowerArmSim.getAngleRads()),
               10,
               new Color8Bit(Color.kPurple)));
-    public Arm(){
+  private final MechanismLigament2d m_wrist =
+      m_lowerArm.append(
+          new MechanismLigament2d(
+              "Wrist",
+              8,
+              0,
+              20,
+              new Color8Bit(Color.kGray)));
+
+  public Arm(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         mElbow.configAllSettings(config);
         mShoulder.configAllSettings(config);
@@ -106,14 +120,17 @@ public class Arm extends SubsystemBase{
         mElbow.setNeutralMode(NeutralMode.Brake);
         mShoulder.setNeutralMode(NeutralMode.Brake);
 
-        mElbow.config_kP(0, 0.1);
-        mElbow.config_kI(0, 0.0);
+//        mElbow.config_kP(0, 400);
+//        mElbow.config_kI(0, 5);
 
-        mShoulder.config_kP(0, 0.1);
-        mShoulder.config_kI(0, 0.0);
+//        mShoulder.config_kP(0, 40);
+//        mShoulder.config_kI(0, 0.0);
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
         m_armTower.setColor(new Color8Bit(Color.kBlue));    
+
+        SmartDashboard.putNumber("Setpoint shoulder (degrees)", -90);
+        SmartDashboard.putNumber("Setpoint elbow (degrees)", 90);
     }
 
     public void runElbowPOutput(double v){
@@ -136,6 +153,9 @@ public class Arm extends SubsystemBase{
   
       SmartDashboard.putNumber("Elbow Position (ticks)", mElbow.getSelectedSensorPosition());
       SmartDashboard.putNumber("Elbow Position (deg)", Units.radiansToDegrees(nativeUnitsToRotationRad(mElbow.getSelectedSensorPosition())));
+
+      mShoulder.setVoltage(mShoulderController.calculate(nativeUnitsToRotationRad(mShoulder.getSelectedSensorPosition()), Units.degreesToRadians(SmartDashboard.getNumber("Setpoint shoulder (degrees)", 0))));
+      mElbow.setVoltage(mElbowController.calculate(nativeUnitsToRotationRad(mElbow.getSelectedSensorPosition()), Units.degreesToRadians(SmartDashboard.getNumber("Setpoint elbow (degrees)", 0))));
     }
 
     public double getShoulderPosition(){
@@ -207,6 +227,9 @@ public class Arm extends SubsystemBase{
 
     @Override
     public void simulationPeriodic() {
+      SmartDashboard.putNumber("Sim Shoulder Position (deg)", Units.radiansToDegrees(m_upperArmSim.getAngleRads()));
+      SmartDashboard.putNumber("Sim Elbow Position (deg)", Units.radiansToDegrees(m_lowerArmSim.getAngleRads()));
+
       /* Pass the robot battery voltage to the simulated Talon FXs */
       m_ElbowSim.setBusVoltage(RobotController.getBatteryVoltage());
       m_ShoulderSim.setBusVoltage(RobotController.getBatteryVoltage());
@@ -253,7 +276,7 @@ public class Arm extends SubsystemBase{
   
       // Update the Mechanism Arm angle based on the simulated arm angle
       m_upperArm.setAngle(Units.radiansToDegrees(m_upperArmSim.getAngleRads()));
-      m_lowerArm.setAngle(Units.radiansToDegrees(m_lowerArmSim.getAngleRads()));
+      m_lowerArm.setAngle(90+Units.radiansToDegrees(m_lowerArmSim.getAngleRads())); //adding 90 to simulate gravity
     }
 
     private int rotationToNativeUnits(double rotationRads){
