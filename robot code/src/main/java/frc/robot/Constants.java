@@ -28,7 +28,7 @@ public final class Constants {
         public static class Drive{
             public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.57;
             public static final double DRIVETRAIN_WHEELBASE_METERS = 0.57;
-            public static final double MAX_SPEED_MULTIPLIER = 0.4; 
+            public static final double MAX_SPEED_MULTIPLIER = 0.2; 
 
             public static final int DRIVETRAIN_PIGEON_ID = 31; 
             public static final String kDriveCANivore = "Drivetrain";

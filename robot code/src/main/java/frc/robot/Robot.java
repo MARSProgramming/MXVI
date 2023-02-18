@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import io.github.oblarg.oblog.Logger;
@@ -30,17 +31,18 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    LiveWindow.disableAllTelemetry();
     m_robotContainer = new RobotContainer();
     Logger.configureLoggingAndConfig(m_robotContainer, false);
-    //mCompressor.enableAnalog(100, 110);
+    m_robotContainer.startCompressor();
+    m_robotContainer.initializeSolenoids();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Logger.updateEntries();
-    //SmartDashboard.putNumber("psi", mCompressor.getPressure());
-    //SmartDashboard.putNumber("current", mCompressor.getCurrent());
+    SmartDashboard.putNumber("psi", m_robotContainer.getPressure());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -53,7 +55,6 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    LiveWindow.disableAllTelemetry();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     LiveWindow.setEnabled(false);
+    m_robotContainer.configureTestBindings();
   }
 
   /** This function is called periodically during test mode. */
