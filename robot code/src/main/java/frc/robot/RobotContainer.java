@@ -25,6 +25,10 @@ import frc.robot.commands.Arm.ManualElbowRight;
 import frc.robot.commands.Arm.ManualShoulderLeft;
 import frc.robot.commands.Arm.ManualShoulderRight;
 import frc.robot.commands.Arm.ManualWrist;
+import frc.robot.commands.Arm.Paths.MoveVelocity;
+import frc.robot.commands.Arm.Paths.StartToLoad;
+import frc.robot.commands.Arm.Paths.StartToScoreLeft;
+import frc.robot.commands.Arm.Paths.StartToScoreRight;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.BottomSolenoids;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -104,26 +108,32 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureTeleopBindings() {
+    //mCoPilot.getRightDPadObject().whileTrue(new MoveVelocity(mArm, () -> deadband(mCoPilot.getLeftX(), 0.2)/1000, () -> deadband(mCoPilot.getLeftY(), 0.2)/1000));
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     mPilot.getLeftTriggerObject().whileTrue(new Intake(mIntakeSubsystem));
 
     //Claw solenoid command(s)
-    mCoPilot.getYButtonObject().onTrue(mArm.toggleClaw());
+    mCoPilot.getAButtonObject().onTrue(mArm.toggleClaw());
 
     //Bottom Solenoid command(s)
     //mCoPilot.getXButtonObject().onTrue(mBottomSolenoids.toggleBottomSolenoid());
 
     //Paddle command(s)
-    mCoPilot.getBButtonObject().onTrue(mPaddle.togglePaddle());
+    //mCoPilot.getBButtonObject().onTrue(mPaddle.togglePaddle());
 
     //Intake command(s)
-    mCoPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
+    mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
 
     mCoPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
     mCoPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
     mCoPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
     mCoPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
-    mCoPilot.getXButtonObject().whileTrue(new ManualWrist(mArm));
+    //mCoPilot.getXButtonObject().whileTrue(new MoveWrist(mArm, 0));
+    //mCoPilot.getBButtonObject().whileTrue(new MoveWrist(mArm, Math.PI));
+    mCoPilot.getUpDPadObject().whileTrue(new ManualWrist(mArm));
+    //mCoPilot.getBButtonObject().whileTrue(new GoToAngles(mArm, Math.PI/2, 0.0));
+    mCoPilot.getYButtonObject().whileTrue(new StartToLoad(mArm));
+    mCoPilot.getXButtonObject().whileTrue(new StartToScoreRight(mArm));
     //new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
    // mPilot.getRightTriggerObject().onTrue(new Intake(mIntakeSubsystem));
 

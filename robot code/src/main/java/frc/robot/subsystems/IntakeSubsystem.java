@@ -51,6 +51,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void initializeSolenoid(){
-      mSolenoid.set(Value.kForward);
+      mSolenoid.set(Value.kReverse);
     }
 }

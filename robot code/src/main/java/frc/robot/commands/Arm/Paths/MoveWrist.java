@@ -1,18 +1,19 @@
-package frc.robot.commands.Arm;
+package frc.robot.commands.Arm.Paths;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ManualWrist extends CommandBase{
+public class MoveWrist extends CommandBase{
     private Arm mArm;
-    public ManualWrist(Arm a){
-        mArm = a;
-        addRequirements(a);
+    private double pos;
+    public MoveWrist(Arm sub, double pos){
+        this.pos = pos;
+        mArm = sub;
     }
 
     @Override
     public void execute(){
-        mArm.runWrist(-0.15);
+        mArm.setWristPosition(pos);
     }
 
     @Override
