@@ -110,8 +110,8 @@ public class Arm extends SubsystemBase{
       SmartDashboard.putNumber("Shoulder pos(deg)", getShoulderPosition());
       SmartDashboard.putNumber("Elbow pos(deg)", getElbowPosition());
       SmartDashboard.putNumber("Wrist Pos", mWrist.getSelectedSensorPosition()/177.6 * 2 * Math.PI);
-      SmartDashboard.putNumber("X", getPosition()[0]);
-      SmartDashboard.putNumber("Y", getPosition()[1]);
+      //SmartDashboard.putNumber("X", getPosition()[0]);
+      //SmartDashboard.putNumber("Y", getPosition()[1]);
     }
 
     public double getShoulderPosition(){
@@ -213,7 +213,7 @@ public class Arm extends SubsystemBase{
     }
 
     public void initializeSolenoid(){
-        mSolenoid.set(Value.kReverse);
+        mSolenoid.set(Value.kForward);
     }
 
     private int rotationToNativeUnits(double rotationRads){

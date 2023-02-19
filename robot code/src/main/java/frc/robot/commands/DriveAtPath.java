@@ -58,6 +58,7 @@ public class DriveAtPath extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return mController.atReference() || mTimer.get() > timeout;
+        SmartDashboard.putNumber("dist", mDrivetrainSubsystem.getPose().getTranslation().getDistance(mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getTranslation()));
+        return mDrivetrainSubsystem.getPose().getTranslation().getDistance(mTrajectory.sample(mTrajectory.getTotalTimeSeconds()).poseMeters.getTranslation()) < 0.01 || mTimer.get() > timeout;
     }
 }

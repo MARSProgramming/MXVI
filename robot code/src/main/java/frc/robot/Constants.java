@@ -4,12 +4,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import edu.wpi.first.wpilibj.Filesystem;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -28,7 +22,7 @@ public final class Constants {
         public static class Drive{
             public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.57;
             public static final double DRIVETRAIN_WHEELBASE_METERS = 0.57;
-            public static final double MAX_SPEED_MULTIPLIER = 0.2; 
+            public static final double MAX_SPEED_MULTIPLIER = 1; 
 
             public static final int DRIVETRAIN_PIGEON_ID = 31; 
             public static final String kDriveCANivore = "Drivetrain";
@@ -61,10 +55,10 @@ public final class Constants {
         }
 
     public static class Auto{
-        public static final double holonomicXkP = 1.0;
+        public static final double holonomicXkP = 1;
         public static final double holonomicXkI = 0;
         public static final double holonomicXkD = 0;
-        public static final double holonomicYkP = 1.0;
+        public static final double holonomicYkP = 1;
         public static final double holonomicYkI = 0;
         public static final double holonomicYkD = 0;
         public static final double holonomicOkP = 2.5;

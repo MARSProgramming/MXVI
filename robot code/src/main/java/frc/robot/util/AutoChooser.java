@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.auto.plays.DoNothing;
 import frc.robot.auto.plays.TestAutoPlay;
 import frc.robot.auto.plays.Blue.BBottomLeaveCommunity;
+import frc.robot.auto.plays.Blue.BMidBalance;
 import frc.robot.auto.plays.Blue.BMidLeaveCommunity;
 import frc.robot.auto.plays.Blue.BSetBottomPose;
 import frc.robot.auto.plays.Blue.BSetMidPose;
@@ -70,6 +71,7 @@ public class AutoChooser {
         autoChooser.addOption("BLUE-BOTTOM: Score Given Piece, Leave Community", new BbScoreGivenLeave(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-MIDDLE: Set Pose", new BSetMidPose(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-MIDDLE: Leave Community", new BMidLeaveCommunity(mDrivetrainSubsystem));
+        autoChooser.addOption("BLUE-MIDDLE: Balance", new BMidBalance(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Set Pose", new BSetTopPose(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Leave Community", new BTopLeaveCommunity(mDrivetrainSubsystem));
         autoChooser.addOption("BLUE-TOP: Score Piece 1, Dock", new BtP1_Dock(mDrivetrainSubsystem));

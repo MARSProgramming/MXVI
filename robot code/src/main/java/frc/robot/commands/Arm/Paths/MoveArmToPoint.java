@@ -30,8 +30,8 @@ public class MoveArmToPoint extends CommandBase{
         //mArm.goToAngles(Math.PI/2, -Math.PI/2);
         //mArm.runAtVelocity(mX.getAsDouble()/5, -mY.getAsDouble()/5);
         //mArm.runAtVelocity(MathUtil.clamp(xController.calculate(mArm.getPosition()[0], x), -0.05, 0.05), MathUtil.clamp(yController.calculate(mArm.getPosition()[1], y), -0.05, 0.05));
-        SmartDashboard.putNumber("x", mArm.getPosition()[0]);
-        SmartDashboard.putNumber("y", mArm.getPosition()[1]);
+        //SmartDashboard.putNumber("x", mArm.getPosition()[0]);
+        //SmartDashboard.putNumber("y", mArm.getPosition()[1]);
         //System.out.println(MathUtil.clamp(xController.calculate(mArm.getPosition()[0], x), -0.1, 0.1));
     }
     @Override

@@ -9,17 +9,18 @@ import frc.robot.commands.ZeroGyroscope;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.util.AutoChooser;
 
-public class BBottomLeaveCommunity extends SequentialCommandGroup{
-    public BBottomLeaveCommunity(DrivetrainSubsystem drivetrain){
+public class BMidBalance extends SequentialCommandGroup{
+    public BMidBalance(DrivetrainSubsystem drivetrain){
         addRequirements(drivetrain);
 
-        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_BottomLeaveCommunity.wpilib.json");
+        Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_MiddleMarker_M-C.wpilib.json");
         addCommands(
-           new ZeroGyroscope(drivetrain, 0).withTimeout(0.1),
-            new ResetDrivePose(drivetrain, 1.81, 0.45, 0).withTimeout(0.1),
+            new ZeroGyroscope(drivetrain, 0).withTimeout(0.1),
+            new ResetDrivePose(drivetrain, 1.81, 2.69, 0),
             new ParallelCommandGroup(
+                // Any changes to make sure arm is secure here
                 new DriveAtPath(drivetrain, LeaveCommunity, 0, 10)
-           )
+            )
 
         );
     }
