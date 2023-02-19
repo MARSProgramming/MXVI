@@ -1,5 +1,6 @@
 package frc.robot.auto.plays.Blue;
 
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -15,12 +16,18 @@ public class BTopLeaveCommunity extends SequentialCommandGroup{
         addRequirements(drivetrain);
 
         Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_TopLeaveCommunity.wpilib.json");
+        if (LeaveCommunity == null) {
+            System.out.println("Trajectory is null");
+        } else {
+            System.out.println("Trajectory found");
+        }
         addCommands(
             new ZeroGyroscope(drivetrain, 0).withTimeout(0.1),
             new ResetDrivePose(drivetrain, 1.81, 4.36, 0),
-            new ParallelCommandGroup(
+            //new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, LeaveCommunity, 0, 10)
-            )
+                
+           // )
 
         );
     }

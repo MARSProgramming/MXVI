@@ -15,11 +15,11 @@ public class BBottomLeaveCommunity extends SequentialCommandGroup{
 
         Trajectory LeaveCommunity = AutoChooser.openTrajectoryFile("BLUE_BottomLeaveCommunity.wpilib.json");
         addCommands(
-           new ZeroGyroscope(drivetrain, 0).withTimeout(0.1),
+           new ZeroGyroscope(drivetrain, 0),
             new ResetDrivePose(drivetrain, 1.81, 0.45, 0),
             new ParallelCommandGroup(
                 new DriveAtPath(drivetrain, LeaveCommunity, 0, 10)
-            )
+           )
 
         );
     }
