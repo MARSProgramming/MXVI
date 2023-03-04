@@ -50,7 +50,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem mDrivetrainSubsystem = new DrivetrainSubsystem();
 
   private final CustomXboxController mPilot = new CustomXboxController(0);
-  private final CustomXboxController mCoPilot = new CustomXboxController(1);
+//  private final CustomXboxController mCoPilot = new CustomXboxController(1);
 
   private HashMap<String, Pose2d> mPointPositionMap;
   private AutoChooser autoChooser = new AutoChooser(mDrivetrainSubsystem);
@@ -108,12 +108,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureTeleopBindings() {
+    mPilot.getBButtonObject().onTrue(mDrivetrainSubsystem.resetPose());
+
     //mCoPilot.getRightDPadObject().whileTrue(new MoveVelocity(mArm, () -> deadband(mCoPilot.getLeftX(), 0.2)/1000, () -> deadband(mCoPilot.getLeftY(), 0.2)/1000));
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
-    mPilot.getLeftTriggerObject().whileTrue(new Intake(mIntakeSubsystem));
+//    mPilot.getLeftTriggerObject().whileTrue(new Intake(mIntakeSubsystem));
 
     //Claw solenoid command(s)
-    mCoPilot.getAButtonObject().onTrue(mArm.toggleClaw());
+    //mCoPilot.getAButtonObject().onTrue(mArm.toggleClaw());
 
     //Bottom Solenoid command(s)
     //mCoPilot.getXButtonObject().onTrue(mBottomSolenoids.toggleBottomSolenoid());
@@ -122,18 +124,18 @@ public class RobotContainer {
     //mCoPilot.getBButtonObject().onTrue(mPaddle.togglePaddle());
 
     //Intake command(s)
-    mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
+//    mPilot.getAButtonObject().onTrue(mIntakeSubsystem.toggleIntake());
 
-    mCoPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
-    mCoPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
-    mCoPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
-    mCoPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
+    //mCoPilot.getLeftTriggerObject().whileTrue(new ManualElbowLeft(mArm));
+    //mCoPilot.getRightTriggerObject().whileTrue(new ManualElbowRight(mArm));
+    //mCoPilot.getLeftBumperObject().whileTrue(new ManualShoulderLeft(mArm));
+    //mCoPilot.getRightBumperObject().whileTrue(new ManualShoulderRight(mArm));
     //mCoPilot.getXButtonObject().whileTrue(new MoveWrist(mArm, 0));
     //mCoPilot.getBButtonObject().whileTrue(new MoveWrist(mArm, Math.PI));
-    mCoPilot.getUpDPadObject().whileTrue(new ManualWrist(mArm));
+    //mCoPilot.getUpDPadObject().whileTrue(new ManualWrist(mArm));
     //mCoPilot.getBButtonObject().whileTrue(new GoToAngles(mArm, Math.PI/2, 0.0));
-    mCoPilot.getYButtonObject().whileTrue(new StartToLoad(mArm));
-    mCoPilot.getXButtonObject().whileTrue(new StartToScoreRight(mArm));
+    //mCoPilot.getYButtonObject().whileTrue(new StartToLoad(mArm));
+    //mCoPilot.getXButtonObject().whileTrue(new StartToScoreRight(mArm));
     //new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
    // mPilot.getRightTriggerObject().onTrue(new Intake(mIntakeSubsystem));
 

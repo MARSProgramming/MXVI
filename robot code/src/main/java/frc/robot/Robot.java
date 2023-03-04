@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,8 +35,8 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
     m_robotContainer = new RobotContainer();
     Logger.configureLoggingAndConfig(m_robotContainer, false);
-    m_robotContainer.startCompressor();
-    m_robotContainer.initializeSolenoids();
+    //m_robotContainer.startCompressor();
+    //m_robotContainer.initializeSolenoids();
   }
 
   @Override
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     Logger.updateEntries();
     SmartDashboard.putNumber("psi", m_robotContainer.getPressure());
+    SmartDashboard.putBoolean("Has Target", (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getInteger(0)==1));
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
