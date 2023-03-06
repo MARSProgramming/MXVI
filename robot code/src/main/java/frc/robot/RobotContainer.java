@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DriveToAprilTag;
 import frc.robot.commands.Intake;
 import frc.robot.commands.ZeroGyroscope;
 import frc.robot.commands.ZeroSwerves;
@@ -50,7 +51,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem mDrivetrainSubsystem = new DrivetrainSubsystem();
 
   private final CustomXboxController mPilot = new CustomXboxController(0);
-  private final CustomXboxController mCoPilot = new CustomXboxController(1);
+//  private final CustomXboxController mCoPilot = new CustomXboxController(1);
 
   private HashMap<String, Pose2d> mPointPositionMap;
   private AutoChooser autoChooser = new AutoChooser(mDrivetrainSubsystem);
@@ -91,7 +92,6 @@ public class RobotContainer {
     SmartDashboard.putData(CommandScheduler.getInstance());
     mPointPositionMap = new HashMap<>();
     mPointPositionMap.put("A", new Pose2d(0, 0, new Rotation2d(Math.toRadians(0.0))));
-    configureTeleopBindings();
   }
 
   public void initializeSolenoids(){
@@ -108,6 +108,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureTeleopBindings() {
+    mPilot.getAButtonObject().onTrue(new DriveToAprilTag(mDrivetrainSubsystem));
+    /* 
     //mCoPilot.getRightDPadObject().whileTrue(new MoveVelocity(mArm, () -> deadband(mCoPilot.getLeftX(), 0.2)/1000, () -> deadband(mCoPilot.getLeftY(), 0.2)/1000));
     mPilot.getYButtonObject().onTrue(new ZeroGyroscope(mDrivetrainSubsystem, 0));
     mPilot.getLeftTriggerObject().whileTrue(new Intake(mIntakeSubsystem));
@@ -136,7 +138,7 @@ public class RobotContainer {
     mCoPilot.getXButtonObject().whileTrue(new StartToScoreRight(mArm));
     //new Trigger(() -> mPilot.getLeftTriggerAxis() > 0.2).onTrue(mIntakeSubsystem.runIntakeMotors(() -> mPilot.getRightTriggerAxis()));
    // mPilot.getRightTriggerObject().onTrue(new Intake(mIntakeSubsystem));
-
+*/
     System.out.println("Teleop Bindings Configured");
   }
 

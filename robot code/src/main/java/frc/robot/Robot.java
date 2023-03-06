@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
     m_robotContainer = new RobotContainer();
     Logger.configureLoggingAndConfig(m_robotContainer, false);
-    m_robotContainer.startCompressor();
-    m_robotContainer.initializeSolenoids();
+    //m_robotContainer.startCompressor();
+    //m_robotContainer.initializeSolenoids();
   }
 
   @Override
